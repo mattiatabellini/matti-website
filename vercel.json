@@ -1,8 +1,0 @@
-{
-  "buildCommand": "echo 'Build complete'",
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
-}
