@@ -91,3 +91,27 @@ footer a:hover { color: #111; }
 .about-body { color: #333; }
 .about-body p { margin-bottom: 12px; }
 
+.portfolio-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  margin: 10px 0 6px;
+}
+.portfolio-table th,
+.portfolio-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  vertical-align: top;
+}
+.portfolio-table thead th {
+  font-weight: normal;
+  font-style: italic;
+  color: #555;
+  border-bottom: 1px solid #555;
+}
+.portfolio-table tbody th { font-weight: normal; }
+.portfolio-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.portfolio-table .pos { color: #1a6b2f; }
+.portfolio-table .neg { color: #9b1c1c; }
+.table-note { font-size: 13px; color: #777; margin: 4px 0 14px; }
