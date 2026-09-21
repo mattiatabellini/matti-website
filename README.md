@@ -10,9 +10,7 @@ Static site. No build step, no dependencies. Just HTML & CSS.
 ├── thoughts.html           ← Thoughts listing
 ├── research.html           ← Research listing
 ├── data.html               ← Data Library listing
-├── portfolio/
-│   ├── index.html          ← Portfolio page (renders portfolio.json)
-│   └── portfolio.json      ← IBKR snapshot data
+├── portfolio.html          ← Portfolio page (renders portfolio/portfolio.json)
 ├── style.css               ← All styles
 ├── thoughts/
 │   ├── _template.html      ← Duplicate for new thoughts
@@ -27,6 +25,8 @@ Static site. No build step, no dependencies. Just HTML & CSS.
 │   ├── gcf-sofr-spread.html
 │   ├── acm-term-premia.html
 │   └── dealer-net-positions.html
+├── portfolio/
+│   └── portfolio.json      ← IBKR snapshot data
 └── README.md
 ```
 
