@@ -10,6 +10,9 @@ Static site. No build step, no dependencies. Just HTML & CSS.
 ├── thoughts.html           ← Thoughts listing
 ├── research.html           ← Research listing
 ├── data.html               ← Data Library listing
+├── portfolio/
+│   ├── index.html          ← Portfolio page (renders portfolio.json)
+│   └── portfolio.json      ← IBKR snapshot data
 ├── style.css               ← All styles
 ├── thoughts/
 │   ├── _template.html      ← Duplicate for new thoughts
