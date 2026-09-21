@@ -32,15 +32,15 @@
         <tr>
           <th>Symbol</th>
           <th class="num">Qty</th>
-          <th class="num">Price</th>
-          <th class="num">Market value</th>
+          <th class="num">Avg price</th>
+          <th class="num">Last</th>
           <th class="num">Unrealized P&amp;L</th>
           <th>Ccy</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
-    <p class="table-note">Prices and values are in each position's own currency; account totals are in EUR.</p>
+    <p class="table-note">Prices and P&amp;L are in each position's own currency; account totals are in EUR.</p>
 
     <p id="error" class="table-note" hidden></p>
 
@@ -54,6 +54,7 @@
       style: 'currency', currency: ccy, minimumFractionDigits: 2, maximumFractionDigits: 2
     }).format(n);
     const fmtNum = n => new Intl.NumberFormat('en-GB', { maximumFractionDigits: 2 }).format(n);
+    const fmtPrice = n => new Intl.NumberFormat('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
     const signed = (n, ccy) => (n > 0 ? '+' : '') + fmt(n, ccy);
     const plClass = n => n > 0 ? 'pos' : n < 0 ? 'neg' : '';
 
@@ -81,8 +82,8 @@
           <tr>
             <td>${p.symbol}</td>
             <td class="num">${fmtNum(p.quantity)}</td>
-            <td class="num">${fmtNum(p.marketPrice)}</td>
-            <td class="num">${fmt(p.marketValue, p.currency)}</td>
+            <td class="num">${fmtPrice(p.averagePrice)}</td>
+            <td class="num">${fmtPrice(p.marketPrice)}</td>
             <td class="num ${plClass(p.unrealizedPL)}">${signed(p.unrealizedPL, p.currency)}</td>
             <td>${p.currency}</td>
           </tr>`).join('');
