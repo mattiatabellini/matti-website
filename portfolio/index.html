@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Mattia Tabellini</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>Mattia Tabellini</h1>
+  </header>
+
+
+  <div class="article-header">
+    <span class="post-date" id="snapshot-date">Loading&hellip;</span>
+    <h1>Portfolio</h1>
+    <p class="subtitle">Interactive Brokers account, as last synced.</p>
+  </div>
+
+  <div class="article-body">
+
+    <h2>Account</h2>
+    <table class="portfolio-table" id="account-table">
+      <tbody></tbody>
+    </table>
+
+    <h2>Positions</h2>
+    <table class="portfolio-table" id="positions-table">
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th class="num">Qty</th>
+          <th class="num">Price</th>
+          <th class="num">Market value</th>
+          <th class="num">Unrealized P&amp;L</th>
+          <th>Ccy</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p class="table-note">Prices and values are in each position's own currency; account totals are in EUR.</p>
+
+    <p id="error" class="table-note" hidden></p>
+
+  </div>
+
+  <p class="back-link"><a href="../">&larr; Back</a></p>
+
+
+  <script>
+    const fmt = (n, ccy) => new Intl.NumberFormat('en-GB', {
+      style: 'currency', currency: ccy, minimumFractionDigits: 2, maximumFractionDigits: 2
+    }).format(n);
+    const fmtNum = n => new Intl.NumberFormat('en-GB', { maximumFractionDigits: 2 }).format(n);
+    const signed = (n, ccy) => (n > 0 ? '+' : '') + fmt(n, ccy);
+    const plClass = n => n > 0 ? 'pos' : n < 0 ? 'neg' : '';
+
+    fetch('/api/ibkr-portfolio')
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(d => {
+        const a = d.account, ccy = a.accountCurrency;
+
+        document.getElementById('snapshot-date').textContent = d.snapshotAt
+          ? 'Snapshot ' + new Date(d.snapshotAt + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+          : 'Snapshot date unknown';
+
+        const accountRows = [
+          ['Net liquidation value', fmt(a.netLiquidationValue, ccy)],
+          ['Total market value', fmt(a.totalMarketValue, ccy)],
+          ['Cash', fmt(a.totalCash, ccy)],
+          ['Buying power', fmt(a.buyingPower, ccy)],
+          ['Leverage', fmtNum(a.leverage) + '×'],
+        ];
+        document.querySelector('#account-table tbody').innerHTML = accountRows
+          .map(([k, v]) => `<tr><th>${k}</th><td class="num">${v}</td></tr>`).join('');
+
+        const positions = [...d.positions].sort((x, y) => y.marketValue - x.marketValue);
+        document.querySelector('#positions-table tbody').innerHTML = positions.map(p => `
+          <tr>
+            <td>${p.symbol}</td>
+            <td class="num">${fmtNum(p.quantity)}</td>
+            <td class="num">${fmtNum(p.marketPrice)}</td>
+            <td class="num">${fmt(p.marketValue, p.currency)}</td>
+            <td class="num ${plClass(p.unrealizedPL)}">${signed(p.unrealizedPL, p.currency)}</td>
+            <td>${p.currency}</td>
+          </tr>`).join('');
+      })
+      .catch(e => {
+        document.getElementById('snapshot-date').textContent = 'Unavailable';
+        const err = document.getElementById('error');
+        err.textContent = 'Could not load portfolio data (' + e.message + ').';
+        err.hidden = false;
+      });
+  </script>
+
+</body>
+</html>
