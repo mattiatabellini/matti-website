@@ -58,7 +58,7 @@
     const signed = (n, ccy) => (n > 0 ? '+' : '') + fmt(n, ccy);
     const plClass = n => n > 0 ? 'pos' : n < 0 ? 'neg' : '';
 
-    fetch('/api/ibkr-portfolio')
+    fetch('portfolio.json')
       .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(d => {
         const a = d.account, ccy = a.accountCurrency;
